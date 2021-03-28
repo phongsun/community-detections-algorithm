@@ -1,0 +1,10 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/peter/Algo/21s-pa03-peter-sun
+ 
+CMAKE IN DEBUG MODE
+ 
+-- Boost_INCLUDE_DIRS: /usr/local/boost_1_75_0
+-- Boost_LIBRARIES: 
+-- Boost_VERSION: 107500
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/peter/Algo/21s-pa03-peter-sun/cmake-build-debug
