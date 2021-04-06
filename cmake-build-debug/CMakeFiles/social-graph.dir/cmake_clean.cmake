@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/social-graph.dir/src/GVGraph.cpp.o"
   "CMakeFiles/social-graph.dir/src/main.cpp.o"
   "social-graph"
   "social-graph.pdb"

@@ -14,16 +14,16 @@ set (EXE_NAME social-graph)
 #   set (input02 "train_target.csv")
 # etc....
 
-#set (input01 "input03.txt")
+set (input01 "data/put_data_here.txt")
 #set (input02 "")
 
 #
 ##########################################
 
 # Copy data files to build dir
-#foreach(file IN LISTS input01 input02 input03 input04)
-#    configure_file(${file} ${file} COPYONLY)
-#endforeach()
+foreach(file IN LISTS input01)
+    configure_file(${file} ${file} COPYONLY)
+endforeach()
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message(" ")
@@ -47,14 +47,14 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 set(COMMON_SOURCES)
-set(TARGET_SOURCES src/main.cpp)
+set(TARGET_SOURCES src/main.cpp src/GVGraph.cpp src/GVGraph.h)
 #set(TEST_SOURCES test/catch.hpp test/test.cpp test/TestSortingAlgos.cpp)
 
 add_executable(${EXE_NAME} ${COMMON_SOURCES} ${TARGET_SOURCES})
 #add_executable(${TEST_NAME} ${COMMON_SOURCES} ${TEST_SOURCES})
 
 Set(BOOST_ROOT /usr/local/boost_1_75_0)
-find_package(Boost 1.75.0 REQUIRED COMPONENTS)
+find_package(Boost)
 if(Boost_FOUND)
     message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
     message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")

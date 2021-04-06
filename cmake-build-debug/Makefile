@@ -143,6 +143,33 @@ social-graph/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/social-graph.dir/build.make CMakeFiles/social-graph.dir/build
 .PHONY : social-graph/fast
 
+src/GVGraph.o: src/GVGraph.cpp.o
+
+.PHONY : src/GVGraph.o
+
+# target to build an object file
+src/GVGraph.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/social-graph.dir/build.make CMakeFiles/social-graph.dir/src/GVGraph.cpp.o
+.PHONY : src/GVGraph.cpp.o
+
+src/GVGraph.i: src/GVGraph.cpp.i
+
+.PHONY : src/GVGraph.i
+
+# target to preprocess a source file
+src/GVGraph.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/social-graph.dir/build.make CMakeFiles/social-graph.dir/src/GVGraph.cpp.i
+.PHONY : src/GVGraph.cpp.i
+
+src/GVGraph.s: src/GVGraph.cpp.s
+
+.PHONY : src/GVGraph.s
+
+# target to generate assembly for a file
+src/GVGraph.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/social-graph.dir/build.make CMakeFiles/social-graph.dir/src/GVGraph.cpp.s
+.PHONY : src/GVGraph.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -179,6 +206,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... social-graph"
+	@echo "... src/GVGraph.o"
+	@echo "... src/GVGraph.i"
+	@echo "... src/GVGraph.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

@@ -6,5 +6,5 @@ CXX_FLAGS = -g -Wall -Wextra -isysroot /Library/Developer/CommandLineTools/SDKs/
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/peter/Algo/21s-pa03-peter-sun/src -I/Users/peter/Algo/21s-pa03-peter-sun/test -I/usr/local/boost_1_75_0 
+CXX_INCLUDES = -I/Users/peter/Algo/21s-pa03-peter-sun/src -I/Users/peter/Algo/21s-pa03-peter-sun/test -I/usr/local/boost_1_75_0 -I/usr/local/include 
 
