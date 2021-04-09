@@ -20,16 +20,6 @@ int main()
     GVGraph gvGraph = GVGraph(edgeList);
     Graph g = gvGraph.getGraph();
     gvGraph.computeBetweeness();
-
-    std::cout << "edges(g) = ";
-    graph_traits<Graph>::edge_iterator ei, ei_end;
-    int j = 0;
-    for (boost::tie(ei, ei_end) = edges(g); ei != ei_end; ++ei) {
-        std::cout << "(" << source(*ei, g)
-                  << "," << target(*ei, g) << ") ";
-        j++;
-    }
-    std::cout << std::endl << j << endl;
 }
 
 vector<Edge> loadInputFile(string fileName)

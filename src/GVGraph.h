@@ -20,31 +20,33 @@
 using namespace std;
 using namespace boost;
 
-//define a custom type of Edge for pair
 typedef std::pair<std::string, std::string> Edge;
 typedef property<vertex_name_t, std::string> VertexName;
 typedef property<edge_weight_t, float> EdgeWeight;
 typedef adjacency_list<vecS, vecS, undirectedS, VertexName, EdgeWeight> Graph;
 typedef property<vertex_rank_t, int> VertexShortestPathCount;
-typedef adjacency_list<vecS, vecS, directedS, VertexShortestPathCount, EdgeWeight> DAG;
+typedef adjacency_list<vecS, vecS, bidirectionalS, VertexShortestPathCount, EdgeWeight> DAG;
+
 using Vertex = Graph::vertex_descriptor;
+using EdgeData = Graph::edge_descriptor;
 
 /**
  * @brief The GVGraph class implements Girvan-Newman algorithm using Boost Graphic Library
  */
 class GVGraph {
     /**
-     * @brief The Vistor struct creates a BFS DAG
+     * @brief The Visitor struct creates a BFS DAG
      */
-    struct Visitor : public boost::default_bfs_visitor {
+    struct Visitor : public boost::default_bfs_visitor
+    {
     public:
         DAG &dag;
         int rootV;
         map<int, set<Vertex>> &levelMap;
-
         Visitor(DAG &iDag, int rootNode, map<int, set<Vertex>> &iMap) : dag(iDag), rootV(rootNode), levelMap(iMap) {}
 
-        void black_target(Graph::edge_descriptor e, const Graph &g) {
+        void black_target(EdgeData e, const Graph &g)
+        {
             //string source = get(boost::vertex_name_t(), g, boost::source(e, g));
             //string target = get(boost::vertex_name_t(), g, boost::target(e, g));
 
@@ -52,40 +54,53 @@ class GVGraph {
             Vertex t = boost::source(e, g);
             add_edge(s, t, 0.0, this->dag);
             int level = 0;
-            if (s == rootV) {
+            if (s == rootV)
+            {
                 level = 1;
                 // for target of root, give 1 for shortest path count to the vertex
                 boost::put(vertex_rank_t(), this->dag, t, 1);
-            } else {
+                boost::put(vertex_rank_t(), this->dag, s, 1);
+            }
+            else
+            {
                 // initialize for shortest path count to the vertex
                 boost::put(vertex_rank_t(), this->dag, t, 0);
-                for (auto const &pair : levelMap) {
+                for (auto const &pair : levelMap)
+                {
                     level = pair.first;
                     auto vList = pair.second;
-                    if (std::find_if(vList.begin(), vList.end(), [s](const int v) { return v == s; }) != vList.end()) {
+                    if (std::find_if(vList.begin(), vList.end(), [s](const int v) { return v == s; }) != vList.end())
+                    {
                         ++level;
                         break;
                     }
                 }
             }
-            if (levelMap.find(level) == levelMap.end()) {
+            if (levelMap.find(level) == levelMap.end())
+            {
                 levelMap[level] = set<Vertex>();
             }
             int deleteLevel = -1;
-            for (auto const &pair : levelMap) {
+            for (auto const &pair : levelMap)
+            {
                 // calculate
                 auto vList = pair.second;
                 // if t is in a existing level
-                if (std::find_if(vList.begin(), vList.end(), [t](const int v) { return v == t; }) != vList.end()) {
-                    if (pair.first > level) { // t already exist in high level set, we need to delete it
+                if (std::find_if(vList.begin(), vList.end(), [t](const int v) { return v == t; }) != vList.end())
+                {
+                    if (pair.first > level)
+                    { // t already exist in high level set, we need to delete it
                         deleteLevel = pair.first;
                         break;
-                    } else {
+                    }
+                    else
+                    {
                         return;
                     }
                 }
             }
-            if (deleteLevel > 0) {
+            if (deleteLevel > 0)
+            {
                 levelMap[deleteLevel].erase(t);
             }
             levelMap[level].insert(t);
@@ -103,6 +118,8 @@ public:
 
     Graph getGraph() { return g; } //return the original graph
     Graph computeBetweeness();
+    DAG computeDAG(Vertex start);
+    Vertex vertex(string vertexName) { return this->indexes[vertexName]; }
 };
 
 
