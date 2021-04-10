@@ -183,9 +183,9 @@ TEST_CASE( "Test GVGraph", "[data]") {
         cout << "...passed" << endl;
     }
 
-    SECTION("Test betweenness for each edge"){
-        cout << "Testing betweenness for each edge" << flush;
-        map<pair<int, int>, int> edgeMap = map<pair<int, int>, int>{
+    SECTION("Test betweenness for each edge in an individual BFS DAG"){
+        cout << "Testing betweenness for each edge in an individual BFS DAG" << flush;
+        map<pair<int, int>, float> edgeMap = map<pair<int, int>, float>{
                 {pair<int, int>(A, B), 2}, {pair<int, int>(A, C), 2}, {pair<int, int>(A, D), 4},
                 {pair<int, int>(A, E), 2}, {pair<int, int>(B, F), 1}, {pair<int, int>(C, F), 1},
                 {pair<int, int>(D, G), 2}, {pair<int, int>(D, H), 1}, {pair<int, int>(E, H), 1},
@@ -195,9 +195,41 @@ TEST_CASE( "Test GVGraph", "[data]") {
         typedef graph_traits<DAG>::edge_iterator edge_it;
         edge_it ei, ei_end;
         for (boost::tie(ei, ei_end) = edges(dag); ei != ei_end; ++ei){
-            int betweenness = get(boost::edge_weight_t(), dag, *ei);
+            float betweenness = get(boost::edge_weight_t(), dag, *ei);
             pair<int, int> e = pair<int, int>(source(*ei, dag), target(*ei, dag));
             REQUIRE(edgeMap[e] == betweenness);
+        }
+        cout << "...passed" << endl;
+    }
+
+    SECTION("Test aggregated completeness for the graph"){
+        cout << "Testing aggregated completeness for the graph" << flush;
+        vector<Edge> eL = {
+                Edge("A", "B"),
+                Edge("A", "C"),
+                Edge("B", "C"),
+                Edge("B", "D"),
+                Edge("D", "E"),
+                Edge("D", "F"),
+                Edge("D", "G"),
+                Edge("E", "F"),
+                Edge("F", "G"),
+        };
+        GVGraph gvGraph1 = GVGraph(eL);
+        Graph g1 = gvGraph1.computeBetweeness();
+        graph_traits<Graph>::edge_iterator gei, gei_end;
+        map<pair<int, int>, float> edgeMap = map<pair<int, int>, float>{
+                {pair<int, int>(A, B), 5}, {pair<int, int>(A, C), 1},
+                {pair<int, int>(B, C), 5}, {pair<int, int>(B, D), 12}, {pair<int, int>(D, G), 4.5},
+                {pair<int, int>(D, F), 4}, {pair<int, int>(D, E), 4.5}, {pair<int, int>(E, F), 1.5},
+                {pair<int, int>(F, G), 1.5}
+        };
+        for (boost::tie(gei, gei_end) = edges(g1); gei != gei_end; ++gei)
+        {
+            // find weight of current edge and divide it by 2
+            float gBtw = get(edge_weight_t(), g1, *gei);
+            pair<int, int> e = pair<int, int>(source(*gei, dag), target(*gei, dag));
+            REQUIRE(edgeMap[e] == gBtw);
         }
         cout << "...passed" << endl;
     }
