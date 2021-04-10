@@ -34,20 +34,35 @@ GVGraph::GVGraph(vector<Edge> edgeList)
 }
 Graph GVGraph::computeBetweeness() {
     typedef graph_traits<DAG>::edge_iterator edge_it;
+
     // iterate through vertices
     for (auto vd : boost::make_iterator_range(boost::vertices(this->g))) {
+
         // compute individual DAG from each vertex with betweenesses
         DAG dag = computeDAG(vd);
         // aggregate individual betweenesses of each DAG to g
         edge_it ei, ei_end;
         for (boost::tie(ei, ei_end) = edges(dag); ei != ei_end; ++ei)
         {
-            //float btw = boost::get(vertex_distance_t(), dag, *ei);
+            // find the edge in g that is the same edge as the current dag edge
+            int s = source(*ei, dag);
+            int t = target(*ei, dag);
+            auto edgeData = boost::edge(s, t, g);
+            float dagBtw = get(edge_weight_t(), dag, *ei);
+            float gBtw = get(edge_weight_t(), g, edgeData.first);
+            put(edge_weight_t(), g, edgeData.first, dagBtw + gBtw);
         }
     }
 
-
     // divide total betweenesses of each edge by 2
+    graph_traits<Graph>::edge_iterator gei, gei_end;
+    for (boost::tie(gei, gei_end) = edges(this->g); gei != gei_end; ++gei)
+    {
+        // find weight of current edge and divide it by 2
+        float gBtw = get(edge_weight_t(), g, *gei);
+        put(edge_weight_t(), g, *gei, gBtw/2.0);
+    }
+
     return g;
 }
 
