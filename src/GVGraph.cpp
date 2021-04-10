@@ -9,50 +9,123 @@
 GVGraph::GVGraph(vector<Edge> edgeList)
 {
     set<string> vertices;
-    //construct vertices for the graph
     for (auto e : edgeList)
     {
-        //vertices is a set so there will be no duplicates of the same element
         vertices.insert(e.first);
         vertices.insert(e.second);
     }
-    this->g = Graph(vertices.size()); //create instance of graph with the size of the vertices
+    this->g = Graph(vertices.size());
 
-    // construct two maps that mutually reference the name of the vertices and index of the vertices
+    // fills the property 'vertex_name_t' of the vertices
     set<string>::iterator it;
     int vIndex = 0; // vertex number
     for (it = vertices.begin(); it != vertices.end(); ++it, vIndex++)
     {
         string vDescription = *it;
-        boost::put(vertex_name_t(), this->g, vIndex, vDescription); // set the property of a vertex
-        this->indexes[vDescription] = boost::vertex(vIndex, this->g);     // build map[node_description, vertex]
-        this->lookup[boost::vertex(vIndex, this->g)] = vDescription;      // build map[vertex, node_description]
+        boost::put(vertex_name_t(), this->g, vIndex, vDescription);   // set the property of a vertex
+        this->indexes[vDescription] = boost::vertex(vIndex, this->g); // build map[node_description, vertex]
+        this->lookup[boost::vertex(vIndex, this->g)] = vDescription;  // build map[vertex, node_description]
     }
-    // add all the edges to the graph
+
     for (int i = 0; i < edgeList.size(); ++i)
     {
         add_edge(this->indexes[edgeList[i].first], this->indexes[edgeList[i].second], this->g);
     }
 }
-
-Graph GVGraph::computeDAG()
-{
-
-    struct Visitor : public boost::default_bfs_visitor {
-        void discover_vertex(Vertex v, const Graph &) const {
-            std::cout << "Current: " << v << std::endl;
+Graph GVGraph::computeBetweeness() {
+    typedef graph_traits<DAG>::edge_iterator edge_it;
+    // iterate through vertices
+    for (auto vd : boost::make_iterator_range(boost::vertices(this->g))) {
+        // compute individual DAG from each vertex with betweenesses
+        DAG dag = computeDAG(vd);
+        // aggregate individual betweenesses of each DAG to g
+        edge_it ei, ei_end;
+        for (boost::tie(ei, ei_end) = edges(dag); ei != ei_end; ++ei)
+        {
+            //float btw = boost::get(vertex_distance_t(), dag, *ei);
         }
-    };
-    /*
-Vertex start = 0;
-        Visitor visitor;
+    }
 
-         boost::breadth_first_search(g, start, boost::visitor(visitor));
 
-        
-        
-        
-         return g;
-         */
-    return NULL;
+    // divide total betweenesses of each edge by 2
+    return g;
+}
+
+DAG GVGraph::computeDAG(Vertex start)
+{
+    typedef graph_traits<DAG>::out_edge_iterator out_edge_it;
+    typedef graph_traits<DAG>::in_edge_iterator in_edge_it;
+
+    // BFS DAG
+    DAG dag = DAG(num_vertices(g));
+    // map is used to track vertices at each level
+    map<int, set<Vertex>> levelMap = map<int, set<Vertex>>();
+    levelMap[0] = set<Vertex>({start});
+    Visitor visitor(dag, start, levelMap);
+
+    // 1. BFS from the starting vertex and have the visitor to construct a DAG
+    boost::breadth_first_search(g, start, boost::visitor(visitor));
+
+    // 2. top-down: calculate a shortest path count for each vertex
+    for (int i = 1; i < levelMap.size(); i++)
+    {
+        for (auto node : levelMap[i])
+        {
+            out_edge_it ei, ei_end;
+            for (boost::tie(ei, ei_end) = out_edges(node, dag); ei != ei_end; ++ei)
+            {
+                Vertex t = target(*ei, dag);
+                // skip edges in the DAG if they are on the same level
+                if (!levelMap[i].count(t))
+                {
+                    // a node adds its own shortest path count to its child's existing shortest path count
+                    int shortestPathCount = get(boost::vertex_rank_t(), dag, t) + get(boost::vertex_rank_t(), dag, node);
+                    boost::put(vertex_rank_t(), dag, t, shortestPathCount);
+                }
+            }
+        }
+    }
+
+    // 3. bottom-up: calculate betweeness for each edge
+    for (int i = levelMap.size() - 1; i > 0; i--)
+    {
+        for (auto node : levelMap[i])
+        {
+            // each node get a credit of 1 + sum of out edges weight
+            float nodeCredit = 1;
+            out_edge_it ei, ei_end;
+            for (boost::tie(ei, ei_end) = out_edges(node, dag); ei != ei_end; ++ei)
+            {
+                float wt = get(boost::edge_weight_t(), dag, *ei);
+                nodeCredit += wt;
+            }
+
+            // sum shortest_path_count of all in_edge nodes (sum_s_p_c),
+            in_edge_it in_ei, in_ei_end;
+            float totalSPC = 0;
+            for (boost::tie(in_ei, in_ei_end) = in_edges(node, dag); in_ei != in_ei_end; ++in_ei)
+            {
+                Vertex parent = source(*in_ei, dag);
+                if (!levelMap[i].count(parent))
+                { // skip if parent is a the same level
+                    int spc = get(vertex_rank_t(), dag, source(*in_ei, dag));
+                    totalSPC += spc;
+                }
+            }
+
+            // in_edge weight = s_p_c/sum_s_p_c + credit
+            for (boost::tie(in_ei, in_ei_end) = in_edges(node, dag); in_ei != in_ei_end; ++in_ei)
+            {
+                Vertex parent = source(*in_ei, dag);
+                if (!levelMap[i].count(parent))
+                { // skip if parent is a the same level
+                    int spc = get(vertex_rank_t(), dag, source(*in_ei, dag));
+                    float wt = spc / totalSPC * nodeCredit;
+                    put(edge_weight_t(), dag, *in_ei, wt);
+                }
+            }
+        }
+    }
+
+    return dag;
 }

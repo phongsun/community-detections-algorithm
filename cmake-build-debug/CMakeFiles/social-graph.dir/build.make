@@ -77,22 +77,9 @@ include CMakeFiles/social-graph.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/social-graph.dir/flags.make
 
-CMakeFiles/social-graph.dir/src/main.cpp.o: CMakeFiles/social-graph.dir/flags.make
-CMakeFiles/social-graph.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/peter/Algo/21s-pa03-peter-sun/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/social-graph.dir/src/main.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/social-graph.dir/src/main.cpp.o -c /Users/peter/Algo/21s-pa03-peter-sun/src/main.cpp
-
-CMakeFiles/social-graph.dir/src/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/social-graph.dir/src/main.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/peter/Algo/21s-pa03-peter-sun/src/main.cpp > CMakeFiles/social-graph.dir/src/main.cpp.i
-
-CMakeFiles/social-graph.dir/src/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/social-graph.dir/src/main.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/peter/Algo/21s-pa03-peter-sun/src/main.cpp -o CMakeFiles/social-graph.dir/src/main.cpp.s
-
 CMakeFiles/social-graph.dir/src/GVGraph.cpp.o: CMakeFiles/social-graph.dir/flags.make
 CMakeFiles/social-graph.dir/src/GVGraph.cpp.o: ../src/GVGraph.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/peter/Algo/21s-pa03-peter-sun/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/social-graph.dir/src/GVGraph.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/peter/Algo/21s-pa03-peter-sun/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/social-graph.dir/src/GVGraph.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/social-graph.dir/src/GVGraph.cpp.o -c /Users/peter/Algo/21s-pa03-peter-sun/src/GVGraph.cpp
 
 CMakeFiles/social-graph.dir/src/GVGraph.cpp.i: cmake_force
@@ -103,16 +90,29 @@ CMakeFiles/social-graph.dir/src/GVGraph.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/social-graph.dir/src/GVGraph.cpp.s"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/peter/Algo/21s-pa03-peter-sun/src/GVGraph.cpp -o CMakeFiles/social-graph.dir/src/GVGraph.cpp.s
 
+CMakeFiles/social-graph.dir/src/main.cpp.o: CMakeFiles/social-graph.dir/flags.make
+CMakeFiles/social-graph.dir/src/main.cpp.o: ../src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/peter/Algo/21s-pa03-peter-sun/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/social-graph.dir/src/main.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/social-graph.dir/src/main.cpp.o -c /Users/peter/Algo/21s-pa03-peter-sun/src/main.cpp
+
+CMakeFiles/social-graph.dir/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/social-graph.dir/src/main.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/peter/Algo/21s-pa03-peter-sun/src/main.cpp > CMakeFiles/social-graph.dir/src/main.cpp.i
+
+CMakeFiles/social-graph.dir/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/social-graph.dir/src/main.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/peter/Algo/21s-pa03-peter-sun/src/main.cpp -o CMakeFiles/social-graph.dir/src/main.cpp.s
+
 # Object files for target social-graph
 social__graph_OBJECTS = \
-"CMakeFiles/social-graph.dir/src/main.cpp.o" \
-"CMakeFiles/social-graph.dir/src/GVGraph.cpp.o"
+"CMakeFiles/social-graph.dir/src/GVGraph.cpp.o" \
+"CMakeFiles/social-graph.dir/src/main.cpp.o"
 
 # External object files for target social-graph
 social__graph_EXTERNAL_OBJECTS =
 
-social-graph: CMakeFiles/social-graph.dir/src/main.cpp.o
 social-graph: CMakeFiles/social-graph.dir/src/GVGraph.cpp.o
+social-graph: CMakeFiles/social-graph.dir/src/main.cpp.o
 social-graph: CMakeFiles/social-graph.dir/build.make
 social-graph: CMakeFiles/social-graph.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/peter/Algo/21s-pa03-peter-sun/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable social-graph"

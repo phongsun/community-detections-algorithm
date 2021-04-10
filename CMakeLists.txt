@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(21s-pa03-peter-sun)
 set (EXE_NAME social-graph)
-#set (TEST_NAME tests)
-
-
+set (TEST_NAME tests)
 
 ##########################################
 # Students, edit the items below.  In the quotes,
@@ -45,13 +43,12 @@ include_directories(test)
 
 set(CMAKE_CXX_STANDARD 17)
 
-
-set(COMMON_SOURCES)
-set(TARGET_SOURCES src/main.cpp src/GVGraph.cpp src/GVGraph.h)
-#set(TEST_SOURCES test/catch.hpp test/test.cpp test/TestSortingAlgos.cpp)
+set(COMMON_SOURCES src/GVGraph.cpp src/GVGraph.h)
+set(TARGET_SOURCES src/main.cpp)
+set(TEST_SOURCES test/catch.hpp test/test.cpp)
 
 add_executable(${EXE_NAME} ${COMMON_SOURCES} ${TARGET_SOURCES})
-#add_executable(${TEST_NAME} ${COMMON_SOURCES} ${TEST_SOURCES})
+add_executable(${TEST_NAME} ${COMMON_SOURCES} ${TEST_SOURCES})
 
 Set(BOOST_ROOT /usr/local/boost_1_75_0)
 find_package(Boost)
