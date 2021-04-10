@@ -40,11 +40,16 @@ class GVGraph {
     struct Visitor : public boost::default_bfs_visitor
     {
     public:
-        DAG &dag;
-        int rootV;
-        map<int, set<Vertex>> &levelMap;
+        DAG &dag; // DAG that will be created by the BFS visitor
+        int rootV; // starting vertex of the DAG
+        map<int, set<Vertex>> &levelMap; // stores vertices by levels of the DAG
         Visitor(DAG &iDag, int rootNode, map<int, set<Vertex>> &iMap) : dag(iDag), rootV(rootNode), levelMap(iMap) {}
 
+        /**
+         * @brief black_target is called when a vertex has been visited from its parent
+         * @param e edge of a BFS visit
+         * @param g graph of the BFS
+         */
         void black_target(EdgeData e, const Graph &g)
         {
             //string source = get(boost::vertex_name_t(), g, boost::source(e, g));
@@ -64,6 +69,10 @@ class GVGraph {
             else
             {
                 // initialize for shortest path count to the vertex
+                int spc = boost::get(vertex_rank_t(), this->dag, t);
+                if(spc == 0){
+                    boost::put(vertex_rank_t(), this->dag, t, 0);
+                }
                 boost::put(vertex_rank_t(), this->dag, t, 0);
                 for (auto const &pair : levelMap)
                 {

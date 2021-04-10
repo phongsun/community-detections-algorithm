@@ -63,7 +63,7 @@ DAG GVGraph::computeDAG(Vertex start)
     levelMap[0] = set<Vertex>({start});
     Visitor visitor(dag, start, levelMap);
 
-    // 1. BFS from A and have the visitor to construct a DAG
+    // 1. BFS from the starting vertex and have the visitor to construct a DAG
     boost::breadth_first_search(g, start, boost::visitor(visitor));
 
     // 2. top-down: calculate a shortest path count for each vertex
@@ -78,6 +78,7 @@ DAG GVGraph::computeDAG(Vertex start)
                 // skip edges in the DAG if they are on the same level
                 if (!levelMap[i].count(t))
                 {
+                    // a node adds its own shortest path count to its child's existing shortest path count
                     int shortestPathCount = get(boost::vertex_rank_t(), dag, t) + get(boost::vertex_rank_t(), dag, node);
                     boost::put(vertex_rank_t(), dag, t, shortestPathCount);
                 }
@@ -124,30 +125,6 @@ DAG GVGraph::computeDAG(Vertex start)
                 }
             }
         }
-    }
-
-    std::cout << "edges(dag) = ";
-    graph_traits<DAG>::edge_iterator ei, ei_end;
-    for (boost::tie(ei, ei_end) = edges(dag); ei != ei_end; ++ei)
-    {
-        float wt = get(boost::edge_weight_t(), dag, *ei);
-        std::cout << "("
-                  << lookup[source(*ei, dag)]
-                  << "," << lookup[target(*ei, dag)]
-                  << ", " << wt << ")\n";
-    }
-    std::cout << std::endl;
-    for (auto const &pair : levelMap)
-    {
-        cout << "level - " << pair.first << endl;
-
-        auto vList = pair.second;
-        for (auto x : vList)
-        {
-            int p = boost::get(boost::vertex_rank_t(), dag, x);
-            cout << lookup[x] << "(" << p << ") ";
-        }
-        std::cout << std::endl;
     }
 
     return dag;

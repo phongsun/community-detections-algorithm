@@ -2686,6 +2686,7 @@ CMakeFiles/social-graph.dir/src/GVGraph.cpp.o: /usr/local/boost_1_75_0/boost/xpr
 
 CMakeFiles/social-graph.dir/src/main.cpp.o: ../src/GVGraph.h
 CMakeFiles/social-graph.dir/src/main.cpp.o: ../src/main.cpp
+CMakeFiles/social-graph.dir/src/main.cpp.o: ../test/catch.hpp
 CMakeFiles/social-graph.dir/src/main.cpp.o: /usr/local/boost_1_75_0/boost/algorithm/string.hpp
 CMakeFiles/social-graph.dir/src/main.cpp.o: /usr/local/boost_1_75_0/boost/algorithm/string/case_conv.hpp
 CMakeFiles/social-graph.dir/src/main.cpp.o: /usr/local/boost_1_75_0/boost/algorithm/string/classification.hpp

@@ -131,6 +131,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named tests
+
+# Build rule for target.
+tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests
+.PHONY : tests
+
+# fast build rule for target.
+tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/build
+.PHONY : tests/fast
+
+#=============================================================================
 # Target rules for targets named social-graph
 
 # Build rule for target.
@@ -149,6 +162,7 @@ src/GVGraph.o: src/GVGraph.cpp.o
 
 # target to build an object file
 src/GVGraph.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/GVGraph.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/social-graph.dir/build.make CMakeFiles/social-graph.dir/src/GVGraph.cpp.o
 .PHONY : src/GVGraph.cpp.o
 
@@ -158,6 +172,7 @@ src/GVGraph.i: src/GVGraph.cpp.i
 
 # target to preprocess a source file
 src/GVGraph.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/GVGraph.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/social-graph.dir/build.make CMakeFiles/social-graph.dir/src/GVGraph.cpp.i
 .PHONY : src/GVGraph.cpp.i
 
@@ -167,6 +182,7 @@ src/GVGraph.s: src/GVGraph.cpp.s
 
 # target to generate assembly for a file
 src/GVGraph.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/src/GVGraph.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/social-graph.dir/build.make CMakeFiles/social-graph.dir/src/GVGraph.cpp.s
 .PHONY : src/GVGraph.cpp.s
 
@@ -197,6 +213,33 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/social-graph.dir/build.make CMakeFiles/social-graph.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+test/test.o: test/test.cpp.o
+
+.PHONY : test/test.o
+
+# target to build an object file
+test/test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/test/test.cpp.o
+.PHONY : test/test.cpp.o
+
+test/test.i: test/test.cpp.i
+
+.PHONY : test/test.i
+
+# target to preprocess a source file
+test/test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/test/test.cpp.i
+.PHONY : test/test.cpp.i
+
+test/test.s: test/test.cpp.s
+
+.PHONY : test/test.s
+
+# target to generate assembly for a file
+test/test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/test/test.cpp.s
+.PHONY : test/test.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -206,12 +249,16 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... social-graph"
+	@echo "... tests"
 	@echo "... src/GVGraph.o"
 	@echo "... src/GVGraph.i"
 	@echo "... src/GVGraph.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... test/test.o"
+	@echo "... test/test.i"
+	@echo "... test/test.s"
 .PHONY : help
 
 
