@@ -73,7 +73,6 @@ class GVGraph {
                 if(spc == 0){
                     boost::put(vertex_rank_t(), this->dag, t, 0);
                 }
-                boost::put(vertex_rank_t(), this->dag, t, 0);
                 for (auto const &pair : levelMap)
                 {
                     level = pair.first;

@@ -168,7 +168,37 @@ TEST_CASE( "Test GVGraph", "[data]") {
         cout << "...passed" << endl;
     }
 
-    SECTION("Test betweenness of edges"){
-        cout << "Testing betweenness of graphs...";
+    SECTION("Test shortest path for each node"){
+        map<int, int> shortestPathMap = map<int, int>{
+                {A, 1}, {B, 1}, {C, 1},
+                {D, 1}, {E, 1}, {F, 2},
+                {G, 1}, {H, 2}, {I, 3},
+                {J, 3}, {K, 6}
+        };
+        cout << "Testing shortest path for each node" << flush;
+        for (auto vd : boost::make_iterator_range(boost::vertices(dag))){
+            int shortestPath = get(boost::vertex_rank_t(), dag, vd);
+            REQUIRE(shortestPathMap[vd] == shortestPath);
+        }
+        cout << "...passed" << endl;
+    }
+
+    SECTION("Test betweenness for each edge"){
+        cout << "Testing betweenness for each edge" << flush;
+        map<pair<int, int>, int> edgeMap = map<pair<int, int>, int>{
+                {pair<int, int>(A, B), 2}, {pair<int, int>(A, C), 2}, {pair<int, int>(A, D), 4},
+                {pair<int, int>(A, E), 2}, {pair<int, int>(B, F), 1}, {pair<int, int>(C, F), 1},
+                {pair<int, int>(D, G), 2}, {pair<int, int>(D, H), 1}, {pair<int, int>(E, H), 1},
+                {pair<int, int>(F, I), 1}, {pair<int, int>(G, I), 0.5}, {pair<int, int>(G, J), 0.5},
+                {pair<int, int>(H, J), 1}, {pair<int, int>(I, K), 0.5}, {pair<int, int>(J, K), 0.5}
+        };
+        typedef graph_traits<DAG>::edge_iterator edge_it;
+        edge_it ei, ei_end;
+        for (boost::tie(ei, ei_end) = edges(dag); ei != ei_end; ++ei){
+            int betweenness = get(boost::edge_weight_t(), dag, *ei);
+            pair<int, int> e = pair<int, int>(source(*ei, dag), target(*ei, dag));
+            REQUIRE(edgeMap[e] == betweenness);
+        }
+        cout << "...passed" << endl;
     }
 }
