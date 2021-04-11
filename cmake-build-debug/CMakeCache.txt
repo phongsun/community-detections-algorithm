@@ -29,6 +29,8 @@ Boost_FILESYSTEM_LIBRARY_DEBUG:FILEPATH=Boost_FILESYSTEM_LIBRARY_DEBUG-NOTFOUND
 //Boost filesystem library (release)
 Boost_FILESYSTEM_LIBRARY_RELEASE:FILEPATH=Boost_FILESYSTEM_LIBRARY_RELEASE-NOTFOUND
 
+Boost_GRAPH_LIBRARY_RELEASE:STRING=/usr/local/lib/libboost_graph-mt.dylib
+
 //Path to a file.
 Boost_INCLUDE_DIR:PATH=/usr/local/boost_1_75_0
 
@@ -260,8 +262,14 @@ Project_BINARY_DIR:STATIC=/Users/peter/Algo/21s-pa03-peter-sun/cmake-build-debug
 //Value Computed by CMake
 Project_SOURCE_DIR:STATIC=/Users/peter/Algo/21s-pa03-peter-sun
 
+//The directory containing a CMake configuration file for boost_graph.
+boost_graph_DIR:PATH=/usr/local/lib/cmake/boost_graph-1.75.0
+
 //The directory containing a CMake configuration file for boost_headers.
 boost_headers_DIR:PATH=/usr/local/lib/cmake/boost_headers-1.75.0
+
+//The directory containing a CMake configuration file for boost_regex.
+boost_regex_DIR:PATH=/usr/local/lib/cmake/boost_regex-1.75.0
 
 
 ########################
@@ -439,6 +447,10 @@ _Boost_INCLUDE_DIR_LAST:INTERNAL=/usr/local/boost_1_75_0
 _Boost_NAMESPACE_LAST:INTERNAL=boost
 //Last used Boost_USE_MULTITHREADED value.
 _Boost_USE_MULTITHREADED_LAST:INTERNAL=TRUE
+//ADVANCED property for variable: boost_graph_DIR
+boost_graph_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: boost_headers_DIR
 boost_headers_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: boost_regex_DIR
+boost_regex_DIR-ADVANCED:INTERNAL=1
 

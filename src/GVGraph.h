@@ -11,6 +11,7 @@
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/graphviz.hpp>
+#include <boost/graph/copy.hpp>
 #include <iostream>
 #include <iterator>
 #include <algorithm>
@@ -122,16 +123,32 @@ private:
     std::map<Vertex, std::string> lookup; //key: number index of the vertex, value: text name of the vertex
     float _m;
     std::map<float, set<pair<int, int>>, std::greater<float>> btw_map;
-    map<int, set<int>> clusterMap;
+
 public:
     GVGraph(vector<Edge> edgeList); //construct a graph with a list of social network connection edges
-    ~GVGraph() {}
-
-    Graph getGraph() { return g; } //return the original graph
     Graph computeBetweeness();
     DAG computeDAG(Vertex start);
     float computeModularity(map<int, set<int>> clusters);
-    float doAlgo();
+    pair<Graph, float> detectCommunities();
+
+    ~GVGraph() {}
+    Graph getGraph() { return g; } //return the original graph
+    string node_name(int vertexIndex) { return lookup[vertexIndex]; }
+    /**
+     * @brief convert map<key, value> to map<value, vector<key>>
+     * @param subClusters map<key, value>
+     * @return map<value, vector<key>>
+     */
+    map<int, set<int>> convertMap(map<int, int> subClusters) {
+        map<int, set<int>> clusterMap = map<int, set<int>>();
+        for (auto const &[vertex, id] : subClusters) {
+            if (clusterMap.find(id) == clusterMap.end()) {
+                clusterMap[id] = set<int>();
+            }
+            clusterMap[id].insert(vertex);
+        }
+        return clusterMap;
+    };
 };
 
 
