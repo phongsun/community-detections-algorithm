@@ -5,6 +5,7 @@
  * @version 1.0
  */
 #include "GVGraph.h"
+//#define DEBUG 1
 // Declare function for loading input file
 vector<Edge> loadInputFile(string fileName);
 /**
@@ -17,16 +18,26 @@ int main()
     //Load file of social network connections into a vector<pair<string, string>>
     vector<Edge> edgeList = loadInputFile("data/put_data_here.txt");
     //Create a GVGraph object of a boost BGL undirected adjacency list
-    GVGraph gvGraph = GVGraph(edgeList);
-    Graph g = gvGraph.getGraph();
+    GVGraph girvan_newman = GVGraph(edgeList);
+#ifdef DEBUG
+    Graph g = girvan_newman.getGraph();
     cout << num_vertices(g) << " vertices " << endl;
-    float modularity = gvGraph.doAlgo();
+#endif
+    pair<Graph, float> gvResult = girvan_newman.detectCommunities();
+    float modularity = gvResult.second;
+    Graph communities = gvResult.first;;
 
-    g = gvGraph.getGraph();
     map<int, int> subClusters;
-    int nclusters = connected_components(g, make_assoc_property_map(subClusters));
-    cout << nclusters << " communities detected!" << endl;
-    cout << "modularity = " << modularity << endl;
+    int nclusters = connected_components(communities, make_assoc_property_map(subClusters));
+    cout << nclusters << " communities detected!";
+    cout << " - modularity = " << modularity << endl;
+    map<int, set<int>> communityMap = girvan_newman.convertMap(subClusters);
+    for (auto c: communityMap) {
+        cout << "Community " << c.first << endl;
+        for (auto node: c.second) {
+            cout << girvan_newman.node_name(node) << endl;
+        }
+    }
 }
 
 vector<Edge> loadInputFile(string fileName)
@@ -37,14 +48,6 @@ vector<Edge> loadInputFile(string fileName)
 
     if (graphFile.is_open())
     {
-        // Check if the first line is '''text
-        getline(graphFile, line);
-        boost::trim(line);
-        if (line != "'''text")
-        {
-            cout << "First line of file is not right" << endl;
-            exit(1);
-        }
         // Get number of edges
         getline(graphFile, line);
         boost::trim(line);

@@ -34,7 +34,6 @@ Graph GVGraph::computeBetweeness() {
 
     // iterate through vertices
     for (auto vd : boost::make_iterator_range(boost::vertices(this->g))) {
-
         // compute individual DAG from each vertex with betweenesses
         DAG dag = computeDAG(vd);
         // aggregate individual betweenesses of each DAG to g
@@ -142,10 +141,10 @@ float GVGraph::computeModularity(map<int, set<int>> clusters) {
     set<int>::iterator it1, it2;
     for (auto const &[clusterId, vertices] : clusters) {
         for (it1 = vertices.begin(); it1 != std::prev(vertices.end()); ++it1) {
-            //   for each vertex v, get degree (vd)
+            //   for each vertex u, get degree (ud)
             float u_d = in_degree(*it1, g);
             for (it2 = std::next(it1, 1); it2 != vertices.end(); it2++) {
-                // for rest of vertex u, in the component, get degree (ud)
+                // for rest of vertex v, in the component, get degree (vd)
                 float v_d = in_degree(*it2, g);
                 // probability p_vu = (vd*ud)/(2*m)
                 float p_uv = (v_d * u_d) / (2 * _m);
@@ -159,11 +158,13 @@ float GVGraph::computeModularity(map<int, set<int>> clusters) {
     return Q;
 }
 
-float GVGraph::doAlgo() {
+pair<Graph, float> GVGraph::detectCommunities() {
+    Graph communities;
     typedef graph_traits<Graph>::edge_iterator edge_it_g;
     int last_num_components = 1;
-    float previousQ = 0;
-    float Q = 0;
+    float modulairty = -1;
+    float Q = -1;
+
     // 1. compute betweenness for the graph
     this->g = computeBetweeness();
 
@@ -178,46 +179,31 @@ float GVGraph::doAlgo() {
                 remove_edge(edge(e_btw.first, e_btw.second, g).first, g);
             }
         }
-
+        // reset the _m after the edge removal
+        _m = num_edges(g);
+        if (_m == 0) {
+            break;
+        }
         // find disconnected clusters in the graph
         map<int, int> subClusters;
         int nclusters = connected_components(this->g, make_assoc_property_map(subClusters));
 
         // if number of sub cluster is more than last round, compute Q
         if (nclusters > last_num_components) {
-            // reset the _m after the edge removal
-            _m = num_edges(g);
-            if (_m == 0) {
-                for (auto const &e_btw : pair.second) {
-                    // if edge exist
-                    if (!edge(e_btw.first, e_btw.second, g).second) {
-                        // remove the edge
-                        add_edge(e_btw.first, e_btw.second, g);
-                    }
-                }
-            } else {
-                // convert subClusters to a easier data structure
-                clusterMap = map<int, set<int>>();
-                for (auto const &[vertex, id] : subClusters) {
-                    if (clusterMap.find(id) == clusterMap.end()) {
-                        clusterMap[id] = set<int>();
-                    }
-                    clusterMap[id].insert(vertex);
-                }
+            // convert subClusters to a easier data structure
+            map<int, set<int>> clusterMap = convertMap(subClusters);
 
-                // 3. calculate modularity of the components in the graph
-                Q = this->computeModularity(clusterMap);
-            }
-            // 4. Done, if modularity > 0.3
-            // or modularity does not change
-            // or 1 edges are left in the graph
-            if (Q >= 0.3 || _m < 2 || previousQ == Q) {
-                break;
-            }
-            previousQ = Q;
-            last_num_components = nclusters;
+            // 3. calculate modularity of the components in the graph
+            Q = this->computeModularity(clusterMap);
         }
+        // take the graph of clusters with the best modularity
+        if (Q > modulairty) {
+            communities = Graph();
+            modulairty = Q;
+            boost::copy_graph(g, communities);
+        }
+        last_num_components = nclusters;
     }
 
-    return Q;
+    return pair < Graph, float > (communities, modulairty);
 }

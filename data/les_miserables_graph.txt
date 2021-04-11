@@ -1,4 +1,3 @@
-'''text
 254
 Napoleon - Myriel
 Myriel - MlleBaptistine
@@ -254,4 +253,3 @@ Claquesous - Montparnasse
 Claquesous - Brujon
 Montparnasse - Brujon
 Child1 - Child2
-'''

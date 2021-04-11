@@ -50,7 +50,7 @@ set(TEST_SOURCES test/catch.hpp test/test.cpp)
 add_executable(${EXE_NAME} ${COMMON_SOURCES} ${TARGET_SOURCES})
 add_executable(${TEST_NAME} ${COMMON_SOURCES} ${TEST_SOURCES})
 
-Set(BOOST_ROOT /usr/local/boost_1_75_0)
+#Set(BOOST_ROOT /usr/local/boost_1_75_0)
 find_package(Boost)
 if(Boost_FOUND)
     message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")

@@ -13,7 +13,6 @@ set(CMAKE_CXX_COMPILER_ID "AppleClang")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../src"
   "../test"
-  "/usr/local/boost_1_75_0"
   "/usr/local/include"
   )
 
