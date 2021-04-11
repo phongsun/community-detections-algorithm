@@ -19,7 +19,14 @@ int main()
     //Create a GVGraph object of a boost BGL undirected adjacency list
     GVGraph gvGraph = GVGraph(edgeList);
     Graph g = gvGraph.getGraph();
-    gvGraph.computeBetweeness();
+    cout << num_vertices(g) << " vertices " << endl;
+    float modularity = gvGraph.doAlgo();
+
+    g = gvGraph.getGraph();
+    map<int, int> subClusters;
+    int nclusters = connected_components(g, make_assoc_property_map(subClusters));
+    cout << nclusters << " communities detected!" << endl;
+    cout << "modularity = " << modularity << endl;
 }
 
 vector<Edge> loadInputFile(string fileName)
@@ -36,6 +43,7 @@ vector<Edge> loadInputFile(string fileName)
         if (line != "'''text")
         {
             cout << "First line of file is not right" << endl;
+            exit(1);
         }
         // Get number of edges
         getline(graphFile, line);
@@ -56,6 +64,7 @@ vector<Edge> loadInputFile(string fileName)
     else
     {
         cout << "Fail to open the file." << endl;
+        exit(1);
     }
     return edgeList;
 }

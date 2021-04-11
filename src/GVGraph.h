@@ -9,6 +9,7 @@
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
+#include <boost/graph/connected_components.hpp>
 #include <boost/graph/graphviz.hpp>
 #include <iostream>
 #include <iterator>
@@ -119,7 +120,9 @@ private:
     Graph g; //Represents the graph of the input connection data
     std::map<std::string, Vertex> indexes; //key: text name of the vertex, value: number index of the vertex
     std::map<Vertex, std::string> lookup; //key: number index of the vertex, value: text name of the vertex
-
+    float _m;
+    std::map<float, set<pair<int, int>>, std::greater<float>> btw_map;
+    map<int, set<int>> clusterMap;
 public:
     GVGraph(vector<Edge> edgeList); //construct a graph with a list of social network connection edges
     ~GVGraph() {}
@@ -127,7 +130,8 @@ public:
     Graph getGraph() { return g; } //return the original graph
     Graph computeBetweeness();
     DAG computeDAG(Vertex start);
-    Vertex vertex(string vertexName) { return this->indexes[vertexName]; }
+    float computeModularity(map<int, set<int>> clusters);
+    float doAlgo();
 };
 
 
