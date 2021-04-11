@@ -5,6 +5,7 @@
  * @version 1.0
  */
 #include "GVGraph.h"
+#include <iostream>
 //#define DEBUG 1
 // Declare function for loading input file
 vector<Edge> loadInputFile(string fileName);
@@ -19,25 +20,28 @@ int main()
     vector<Edge> edgeList = loadInputFile("data/put_data_here.txt");
     //Create a GVGraph object of a boost BGL undirected adjacency list
     GVGraph girvan_newman = GVGraph(edgeList);
-#ifdef DEBUG
-    Graph g = girvan_newman.getGraph();
-    cout << num_vertices(g) << " vertices " << endl;
-#endif
+
     pair<Graph, float> gvResult = girvan_newman.detectCommunities();
     float modularity = gvResult.second;
     Graph communities = gvResult.first;;
 
     map<int, int> subClusters;
     int nclusters = connected_components(communities, make_assoc_property_map(subClusters));
-    cout << nclusters << " communities detected!";
-    cout << " - modularity = " << modularity << endl;
+
+    cout << nclusters << " communities have been detected for "
+        << num_vertices(communities) << " vertices " << endl;
+
+    cout << "   - modularity = " << modularity << endl;
+
+    ofstream outputStream("./output.txt");
     map<int, set<int>> communityMap = girvan_newman.convertMap(subClusters);
     for (auto c: communityMap) {
-        cout << "Community " << c.first << endl;
+        outputStream << "Community " << c.first << endl;
         for (auto node: c.second) {
-            cout << girvan_newman.node_name(node) << endl;
+            outputStream << girvan_newman.node_name(node) << endl;
         }
     }
+    outputStream.close();
 }
 
 vector<Edge> loadInputFile(string fileName)
