@@ -7,6 +7,8 @@
 #include "GVGraph.h"
 #include <iostream>
 //#define DEBUG 1
+string trim(const string& str);
+std::vector<std::string> split(const std::string& s, char delimiter);
 // Declare function for loading input file
 vector<Edge> loadInputFile(string fileName);
 /**
@@ -28,10 +30,11 @@ int main()
     map<int, int> subClusters;
     int nclusters = connected_components(communities, make_assoc_property_map(subClusters));
 
-    cout << nclusters << " communities have been detected for "
-        << num_vertices(communities) << " vertices " << endl;
+    cout <<"*** "<< nclusters << " communities have been detected for "
+        << num_vertices(communities) << " vertices ***" << endl;
 
-    cout << "   - modularity = " << modularity << endl;
+    cout << "   - modularity is " << modularity << endl;
+    cout << "   - results are in output.txt" << endl;
 
     ofstream outputStream("./output.txt");
     map<int, set<int>> communityMap = girvan_newman.convertMap(subClusters);
@@ -44,6 +47,29 @@ int main()
     outputStream.close();
 }
 
+string trim(const string& str)
+{
+    size_t first = str.find_first_not_of(' ');
+    if (string::npos == first)
+    {
+        return str;
+    }
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last - first + 1));
+}
+
+std::vector<std::string> split(const std::string& s, char delimiter)
+{
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream tokenStream(s);
+    while (std::getline(tokenStream, token, delimiter))
+    {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
 vector<Edge> loadInputFile(string fileName)
 {
     string line;
@@ -54,16 +80,15 @@ vector<Edge> loadInputFile(string fileName)
     {
         // Get number of edges
         getline(graphFile, line);
-        boost::trim(line);
+        trim(line);
         int numOfEdges = stoi(line);
         for (int i = 0; i < numOfEdges; i++)
         {
             getline(graphFile, line);
-            boost::trim(line);
-            vector<string> tmp;
-            boost::split(tmp, line, boost::is_any_of("-"));
-            boost::trim(tmp[0]);
-            boost::trim(tmp[1]);
+            trim(line);
+            vector<string> tmp = split(line, '-');
+            trim(tmp[0]);
+            trim(tmp[1]);
             Edge edge = Edge(tmp[0], tmp[1]);
             edgeList.push_back(edge);
         }
