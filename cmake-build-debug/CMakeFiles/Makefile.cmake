@@ -43,8 +43,21 @@ set(CMAKE_MAKEFILE_DEPENDS
   "../data/put_data_here.txt"
   "/usr/local/lib/cmake/Boost-1.75.0/BoostConfig.cmake"
   "/usr/local/lib/cmake/Boost-1.75.0/BoostConfigVersion.cmake"
+  "/usr/local/lib/cmake/BoostDetectToolset-1.75.0.cmake"
+  "/usr/local/lib/cmake/boost_graph-1.75.0/boost_graph-config-version.cmake"
+  "/usr/local/lib/cmake/boost_graph-1.75.0/boost_graph-config.cmake"
+  "/usr/local/lib/cmake/boost_graph-1.75.0/libboost_graph-variant-mt-shared.cmake"
+  "/usr/local/lib/cmake/boost_graph-1.75.0/libboost_graph-variant-mt-static.cmake"
+  "/usr/local/lib/cmake/boost_graph-1.75.0/libboost_graph-variant-shared.cmake"
+  "/usr/local/lib/cmake/boost_graph-1.75.0/libboost_graph-variant-static.cmake"
   "/usr/local/lib/cmake/boost_headers-1.75.0/boost_headers-config-version.cmake"
   "/usr/local/lib/cmake/boost_headers-1.75.0/boost_headers-config.cmake"
+  "/usr/local/lib/cmake/boost_regex-1.75.0/boost_regex-config-version.cmake"
+  "/usr/local/lib/cmake/boost_regex-1.75.0/boost_regex-config.cmake"
+  "/usr/local/lib/cmake/boost_regex-1.75.0/libboost_regex-variant-mt-shared.cmake"
+  "/usr/local/lib/cmake/boost_regex-1.75.0/libboost_regex-variant-mt-static.cmake"
+  "/usr/local/lib/cmake/boost_regex-1.75.0/libboost_regex-variant-shared.cmake"
+  "/usr/local/lib/cmake/boost_regex-1.75.0/libboost_regex-variant-static.cmake"
   )
 
 # The corresponding makefile is:

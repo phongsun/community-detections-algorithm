@@ -85,10 +85,10 @@ vector<Edge> loadInputFile(string fileName)
         for (int i = 0; i < numOfEdges; i++)
         {
             getline(graphFile, line);
-            trim(line);
+            line = trim(line);
             vector<string> tmp = split(line, '-');
-            trim(tmp[0]);
-            trim(tmp[1]);
+            tmp[0] = trim(tmp[0]);
+            tmp[1] = trim(tmp[1]);
             Edge edge = Edge(tmp[0], tmp[1]);
             edgeList.push_back(edge);
         }
