@@ -50,7 +50,7 @@ set(TEST_SOURCES test/catch.hpp test/test.cpp)
 add_executable(${EXE_NAME} ${COMMON_SOURCES} ${TARGET_SOURCES})
 add_executable(${TEST_NAME} ${COMMON_SOURCES} ${TEST_SOURCES})
 
-set(BOOST_ROOT /opt/boost_1_75_0)
+#set(BOOST_ROOT /opt/boost_1_75_0)
 #find_package(Boost)
 find_package(Boost 1.75.0 COMPONENTS graph)
 if(Boost_FOUND)

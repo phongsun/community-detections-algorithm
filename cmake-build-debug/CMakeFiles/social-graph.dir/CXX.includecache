@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/Users/peter/Algo/21s-pa03-peter-sun/src/GVGraph.cpp
-GVGraph.h
-/Users/peter/Algo/21s-pa03-peter-sun/src/GVGraph.h
-
 /Users/peter/Algo/21s-pa03-peter-sun/src/GVGraph.h
 boost/graph/graph_traits.hpp
 -

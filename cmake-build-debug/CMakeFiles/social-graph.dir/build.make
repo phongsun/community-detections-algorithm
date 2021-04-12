@@ -114,6 +114,8 @@ social__graph_EXTERNAL_OBJECTS =
 social-graph: CMakeFiles/social-graph.dir/src/GVGraph.cpp.o
 social-graph: CMakeFiles/social-graph.dir/src/main.cpp.o
 social-graph: CMakeFiles/social-graph.dir/build.make
+social-graph: /usr/local/lib/libboost_graph-mt.dylib
+social-graph: /usr/local/lib/libboost_regex-mt.dylib
 social-graph: CMakeFiles/social-graph.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/peter/Algo/21s-pa03-peter-sun/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable social-graph"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/social-graph.dir/link.txt --verbose=$(VERBOSE)
