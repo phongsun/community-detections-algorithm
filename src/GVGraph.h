@@ -24,6 +24,8 @@ typedef property<vertex_name_t, std::string> VertexName;
 typedef property<edge_weight_t, float> EdgeWeight;
 typedef adjacency_list<vecS, vecS, undirectedS, VertexName, EdgeWeight> Graph;
 typedef property<vertex_rank_t, int> VertexShortestPathCount;
+// use bidirectionalS for DAG so that in_edges() can be used.
+// direction of DAG is determined by (source, target) when an edge is added to the graph
 typedef adjacency_list<vecS, vecS, bidirectionalS, VertexShortestPathCount, EdgeWeight> DAG;
 
 using Vertex = Graph::vertex_descriptor;
@@ -34,7 +36,7 @@ using EdgeData = Graph::edge_descriptor;
  */
 class GVGraph {
     /**
-     * @brief The Visitor struct creates a BFS DAG
+     * @brief The Visitor struct DAG of shortest path from the root using BFS
      */
     struct Visitor : public boost::default_bfs_visitor
     {
@@ -42,18 +44,22 @@ class GVGraph {
         DAG &dag; // DAG that will be created by the BFS visitor
         int rootV; // starting vertex of the DAG
         map<int, set<Vertex>> &levelMap; // stores vertices by levels of the DAG
+        /**
+         * @brief constructor
+         * @param iDag the DAG with shortest paths to be created
+         * @param rootNode starting vertex of the DAG
+         * @param iMap map of vertices at each level of the DAG
+         */
         Visitor(DAG &iDag, int rootNode, map<int, set<Vertex>> &iMap) : dag(iDag), rootV(rootNode), levelMap(iMap) {}
 
         /**
          * @brief black_target is called when a vertex has been visited from its parent
+         * and the edge is about to dequeued. This edge is part of the shortest path.
          * @param e edge of a BFS visit
          * @param g graph of the BFS
          */
         void black_target(EdgeData e, const Graph &g)
         {
-            //string source = get(boost::vertex_name_t(), g, boost::source(e, g));
-            //string target = get(boost::vertex_name_t(), g, boost::target(e, g));
-
             Vertex s = boost::target(e, g);
             Vertex t = boost::source(e, g);
             add_edge(s, t, 0.0, this->dag);
@@ -118,14 +124,39 @@ private:
     Graph g; //Represents the graph of the input connection data
     std::map<std::string, Vertex> indexes; //key: text name of the vertex, value: number index of the vertex
     std::map<Vertex, std::string> lookup; //key: number index of the vertex, value: text name of the vertex
-    float _m;
-    std::map<float, set<pair<int, int>>, std::greater<float>> btw_map;
+    float _m; // number of edges in g
+    std::map<float, set<pair<int, int>>, std::greater<float>> btw_map; // the betweeness of edges in decending order
 
 public:
-    GVGraph(vector<Edge> edgeList); //construct a graph with a list of social network connection edges
+    /**
+     * @brief construct a graph with a list of social network connection edges
+     * @param edgeList vector of edges of pair<int, int>
+     */
+    GVGraph(vector<Edge> edgeList);
+    /**
+     * @brief aggregate betweeness of DAGs back to g
+     * @return graph with aggregated betweeness on edges
+     */
     Graph computeBetweeness();
+    /**
+     * @brief create a DAG with shortest paths to all nodes from a start vertex using BFS
+     * @param start starting vertex of the DAG
+     * @return a DAG
+     */
     DAG computeDAG(Vertex start);
+    /**
+     * @brief calculate modularity (Q) of a graup of clusters
+     * @param clusters
+     * @return the Q (range from -1 to 1)
+     */
     float computeModularity(map<int, set<int>> clusters);
+    /**
+     * @brief 1. remove edges with highest betweeness
+     *        2. if removal creates new clusters, calculate modularity of the clusters
+     *        3. track the graph with highest modularity
+     *        4. stop if there are no more edges in g, otherwise repeat 1
+     * @return the graph of sub-clusters with highest modularity identified in the process
+     */
     pair<Graph, float> detectCommunities();
 
     ~GVGraph() {}
